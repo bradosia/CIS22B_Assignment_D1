@@ -8,6 +8,7 @@ Problem D1
 Used Microsoft Visual Studio 2017
 
 Car class
+Reads data from "data.txt" and prints it.
 */
 #include <iostream>
 #include <iomanip>
@@ -60,8 +61,7 @@ int main ()
 **************************************************/
 
 /******************* Car::setup *******************
-** Puts the data into the data structure
-** height and radius into a pointer to the Cone
+** Puts the car data into the object
 **************************************************/
 void Car::setup (string reportingMarkInit, int carNumberInit, string kindInit, bool loadedInit, string destinationInit)
 {
@@ -73,9 +73,7 @@ void Car::setup (string reportingMarkInit, int carNumberInit, string kindInit, b
 }
 
 /********************* Car::output ****************
-** Calls the getVolume function to get the volume
-** Prints the height, radius, and volume in a neat
-** format
+** Prints the car data in a neat format
 **************************************************/
 void Car::output ()
 {
@@ -87,7 +85,7 @@ void Car::output ()
 		<< setw (16) << left << "carNumber: " << carNumber << endl
 		<< setw (16) << left << "kind: " << kind << endl
 		<< setw (16) << left << "loaded: " << loadedString << endl
-		<< setw (16) << left << "destination: " << destination << endl;
+		<< setw (16) << left << "destination: " << destination << endl << endl;
 }
 
 /**************************************************
@@ -95,14 +93,13 @@ void Car::output ()
 **************************************************/
 
 /********************* input **********************
-** Reads the height and radius from the user as
-** reference parameters
+** Reads the car data from the text file "data.txt"
+** Prints data from the file
 **************************************************/
 void input ()
 {
-	string carType, reportingMarkInit, kindInit, destinationInit;
+	string carType, reportingMarkInit, kindInit, destinationInit, loadedInit;
 	int carNumberInit;
-	bool loadedInit;
 	std::fstream inputFile;
 	inputFile.open ("data.txt");
 	if (!inputFile)
@@ -110,59 +107,43 @@ void input ()
 		cerr << "File could not be opened." << endl;
 		exit (1);
 	}
-	/*
 	while (inputFile.peek () != EOF)
 	{
 		while (inputFile.peek () == ' ')
 			inputFile.get ();
-		cin >> carType >> reportingMarkInit >> carNumberInit >> kindInit >> loadedInit;
+		inputFile >> carType >> reportingMarkInit >> carNumberInit >> kindInit >> loadedInit;
 		while (inputFile.peek () == ' ')
 			inputFile.get ();
-		getline (cin, destinationInit);
+		getline (inputFile, destinationInit);
+		// If the carType is not "Car", send an error message and do nothing.
 		if (carType == "Car")
 		{
-			Car temp (reportingMarkInit, carNumberInit, kindInit, loadedInit, destinationInit);
+			// If the carType is "Car", declare a Car object named temp using the constructor that takes 5 parameters.
+			Car temp (reportingMarkInit, carNumberInit, kindInit, loadedInit=="true"?true:false, destinationInit);
 			temp.output ();
 		}
-		else
-		{
-			cerr << "Not a car" << endl;
-		}
-		inputFile.close ();
-	}*/
+		// If the carType is not "Car", send an error message and do nothing.
+		else cerr << "Not a car" << endl;
+	}
+	inputFile.close ();
 }
 
 /* Execution results
-Enter each value promted for below followed by a hard return:
-reportingMark: SP
-carNumber: 34567
-kind: business
-loaded: true
-
-Enter the destination
-i.e. Salt Lake City
-Salt Lake City
-
-Contents of car1
-reportingMark:  SP
-carNumber:      34567
-kind:           business
-loaded:         true
-destination:    Salt Lake City
-
-Contents of car2
-reportingMark:  SP
-carNumber:      34567
-kind:           business
-loaded:         true
-destination:    Salt Lake City
-
-Contents of car3
-reportingMark:
-carNumber:      0
-kind:           other
+reportingMark:  CN
+carNumber:      819481
+kind:           maintenance
 loaded:         false
 destination:    NONE
-car1 is the same car as car2
-car2 is not the same car as car3
+
+reportingMark:  SLSF
+carNumber:      46871
+kind:           business
+loaded:         true
+destination:    Memphis
+
+reportingMark:  AOK
+carNumber:      156
+kind:           tender
+loaded:         true
+destination:    McAlester
 */
